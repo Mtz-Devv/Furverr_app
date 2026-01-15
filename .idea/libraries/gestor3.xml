@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gestor3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/gestor/gestor/gestor.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

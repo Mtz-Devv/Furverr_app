@@ -1,0 +1,13 @@
+
+#Database configuration
+.ConnectionDB.properties
+
+#Database configuration Pa que Amarre la hdsptm
+src/main/resources/ConnectionDB.properties
+
+# maven 'done do' folder.
+target
+
+
+# Project exclude paths
+/out/

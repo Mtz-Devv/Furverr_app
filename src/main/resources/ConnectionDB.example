@@ -1,0 +1,5 @@
+db.host = Str
+db.port = Str
+db.name = Str
+db.username = Str
+db.password = Str
