@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="gestor4">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/src/gestor/gestor.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
