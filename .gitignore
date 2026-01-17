@@ -1,9 +1,12 @@
 
 #Database configuration
 .ConnectionDB.properties
+.env
 
 #Database configuration Pa que Amarre la hdsptm
 src/main/resources/ConnectionDB.properties
+src/main/resources/.env
+
 
 # maven 'done do' folder.
 target
@@ -11,3 +14,4 @@ target
 
 # Project exclude paths
 /out/
+
