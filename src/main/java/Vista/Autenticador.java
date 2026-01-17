@@ -1,14 +1,38 @@
 package Vista;
 
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -465,7 +489,7 @@ public class Autenticador extends JFrame {
             txtPass.setText("");
             txtPass2.setText("");
 
-            cardLayout.show(derechoCards, EXITO_REGISTRO);
+            mostrarExitoYVolver(EXITO_REGISTRO);
         });
         p.add(btnRegister);
 
@@ -682,7 +706,7 @@ public class Autenticador extends JFrame {
             txtPass1.setText("");
             txtPass2.setText("");
 
-            cardLayout.show(derechoCards, EXITO_CAMBIO);
+            mostrarExitoYVolver(EXITO_CAMBIO);
         });
 
         p.add(btnConfirmar);
@@ -791,5 +815,21 @@ public class Autenticador extends JFrame {
             }
         });
     }
+/**
+     * Muestra una tarjeta de éxito y programa un temporizador para volver
+     * a la pantalla de inicio automáticamente después de 2 segundos.
+     * * @param tarjetaExito El nombre de la tarjeta a mostrar (ej: EXITO_REGISTRO)
+     */
+    private void mostrarExitoYVolver(String tarjetaExito) {
+        // 1. Mostrar la pantalla de éxito indicada
+        cardLayout.show(derechoCards, tarjetaExito);
 
+        // 2. Iniciar el timer de 2 segundos (2000 ms)
+        Timer timerRedireccion = new Timer(2000, e -> {
+            cardLayout.show(derechoCards, INICIO);
+        });
+        
+        timerRedireccion.setRepeats(false); // Asegurar que solo corra una vez
+        timerRedireccion.start();
+    }
 }
