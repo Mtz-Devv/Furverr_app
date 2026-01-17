@@ -22,9 +22,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 /// imports para AWS and S3 at nueva foto function.
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.regions.Region;
+//import software.amazon.awssdk.services.s3.S3Client;
+//import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+///import software.amazon.awssdk.regions.Region;
 import java.net.URL;
 /// Fin imports for AWS and S3
 ///import java.time.LocalDate;
@@ -332,59 +332,56 @@ private Image cargarImagenPerfil() {
         }
     }
 
-    private void seleccionarNuevaFoto() {
+   private void seleccionarNuevaFoto() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Seleccionar Foto");
         chooser.setFileFilter(new FileNameExtensionFilter("Imágenes (JPG, PNG)", "jpg", "png", "jpeg"));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = chooser.getSelectedFile();
-            try {
+            
+            // Cambiar cursor a cargando (Feedback visual)
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-        // DETAILS EC2
-                String nombreBucket = "furverr-server";
-                Region region = Region.US_EAST_1; //
+            // ------
+            // hilo separado para no congelar la interfaz mientras sube
+            new Thread(() -> {
+                try {
+                    // SERVICIO de folder en S3
+                    // "perfiles" es la carpeta donde queremos guardar esto
+                    String rutaFinalUrl = utils.S3Service.subirImagen(archivoSeleccionado, usuario.getNombreUsuario(), "perfiles");
 
-        // PROCESS TO CONNECT DB with DB
+                    // Volvemos al hilo de UI para actualizar la pantalla
+                    SwingUtilities.invokeLater(() -> {
+                        this.setCursor(Cursor.getDefaultCursor()); // Restaurar cursor
 
-                // 2. Generar nombre único para S3 (Igual que hacías antes)
-                String nombreArchivoS3 = "perfil_" + usuario.getNombreUsuario() + "_" + System.currentTimeMillis() + ".png";
+                        if (rutaFinalUrl != null) {
+                            //Guardar URL en Base de Datos
+                            boolean exito = database.GestorDeDatos.actualizarFotoPerfil(usuario.getNombreUsuario(), rutaFinalUrl);
 
-                //Inicializar cliente S3 (Esto buscará tus credenciales configuradas)
-                S3Client s3 = S3Client.builder()
-                        .region(region)
-                        .build();
-                //SUBIR EL ARCHIVO A LA NUBE.
-                PutObjectRequest request = PutObjectRequest.builder()
-                        .bucket(nombreBucket)
-                        .key(nombreArchivoS3)
-                        .build();
+                            if (exito) {
+                                usuario.setRutaFotoPerfil(rutaFinalUrl);
+                                try {
+                                    ImageIcon nuevoIcono = new ImageIcon(new URL(rutaFinalUrl));
+                                    actualizarDibujoAvatar(nuevoIcono.getImage());
+                                    if (accionActualizarHeader != null) accionActualizarHeader.run();
+                                    JOptionPane.showMessageDialog(this, "¡Foto actualizada!");
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Error al guardar en BD.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Error al subir la imagen a la nube.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
 
-                s3.putObject(request, archivoSeleccionado.toPath());
-                s3.close(); // Cerramos conexión
-
-                //CONSTRUIR LA URL PÚBLICA
-                String rutaFinalUrl = "https://" + nombreBucket + ".s3.us-east-1.amazonaws.com/" + nombreArchivoS3;
-
-                //Guardar la URL en DB at EC2
-                boolean exito = database.GestorDeDatos.actualizarFotoPerfil(usuario.getNombreUsuario(), rutaFinalUrl);
-
-                if (exito) {
-                    usuario.setRutaFotoPerfil(rutaFinalUrl);
-                    
-                    ImageIcon nuevoIcono = new ImageIcon(new URL(rutaFinalUrl));
-                    actualizarDibujoAvatar(nuevoIcono.getImage());
-                    
-                    if (accionActualizarHeader != null) accionActualizarHeader.run();
-                    
-                    JOptionPane.showMessageDialog(this, "¡Foto actualizada!");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error BD.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    SwingUtilities.invokeLater(() -> this.setCursor(Cursor.getDefaultCursor()));
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error IO: " + e.getMessage());
-            }
+            }).start();
         }
     }
 

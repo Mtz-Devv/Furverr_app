@@ -1,3 +1,11 @@
+///
+/// IMPORTANTE:
+/// MODIFICACIONES HECHAS:
+/// private void piblicarGig()
+///          - Agregado manejo de imágenes (subida a S3 y guardado de URLs)
+///          - Guardado completo del Gig en la base de datos
+/// 
+
 package Vista.componentes;
 
 import Vista.Estilos;
@@ -23,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import utils.S3Service;
 
 public class GigsView {
 
@@ -869,42 +879,82 @@ public class GigsView {
     }
 
     private void publicarGig() {
-        List<String> rutasPersistentes = new ArrayList<>();
-        String nombreUsuario = panelPrincipal.getIlustrador().getNombreUsuario();
-        
-        for (int i = 0; i < tempRutasGaleria.size(); i++) {
-            String rutaOriginal = tempRutasGaleria.get(i);
-            if (rutaOriginal != null) {
-                File archivoOrigen = new File(rutaOriginal);
-                if (archivoOrigen.exists()) {
-                    String nuevaRuta = utils.GestorDeArchivos.guardarImagenGig(
-                            archivoOrigen, nombreUsuario, tempTitulo, i);
-                    if (nuevaRuta != null) rutasPersistentes.add(nuevaRuta);
+        if (tempTitulo == null || tempTitulo.isEmpty()) {
+            JOptionPane.showMessageDialog(panelPrincipal, "Falta el título del servicio.");
+            return;
+        }
+
+        // "Cargando" para feedback visual
+        panelPrincipal.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+        // PROCESO EN SEGUNDO PLANO (THREAD)
+        new Thread(() -> {
+            List<String> rutasFinalesCloud = new ArrayList<>();
+            String nombreUsuario = panelPrincipal.getIlustrador().getNombreUsuario();
+            boolean errorOcurrido = false;
+
+            try {
+                for (String rutaOriginal : tempRutasGaleria) {
+                    if (rutaOriginal != null) {
+                        File archivo = new File(rutaOriginal);
+                        
+                        // "gigs" name carpeta en tu bucket
+                        String urlNube = S3Service.subirImagen(archivo, nombreUsuario, "gigs");
+                        // ---------------------------------------------
+
+                        if (urlNube != null) {
+                            rutasFinalesCloud.add(urlNube);
+                            System.out.println("Imagen subida: " + urlNube);
+                        } else {
+                            errorOcurrido = true;
+                            break; // Detener si falla una imagen
+                        }
+                    }
                 }
+
+                // VOLVER AL HILO GRÁFICO (Swing UI)
+                // Swing no permite tocar la UI desde otro hilo, usamos invokeLater
+                boolean finalError = errorOcurrido;
+                SwingUtilities.invokeLater(() -> {
+                    panelPrincipal.setCursor(Cursor.getDefaultCursor()); // Restaurar cursor
+
+                    if (finalError || rutasFinalesCloud.isEmpty()) {
+                        JOptionPane.showMessageDialog(panelPrincipal, 
+                            "Error al subir las imágenes a la nube. Revisa tu conexión.", 
+                            "Error de Conexión", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // GUARDAR EN BASE DE DATOS
+                    // objeto con la PRIMERA imagen como portada
+                    Ilustracion gigBase = new Ilustracion(
+                            tempTitulo, tempDescripcion, tempPaquetes.get(0).precio,
+                            rutasFinalesCloud.get(0), // Portada (URL S3)
+                            nombreUsuario, tempCategoria, tempEtiquetas
+                    );
+
+                    boolean exito = GestorDeDatos.publicarServicioCompleto(
+                            gigBase, tempPaquetes, tempExtras, tempFaqs, rutasFinalesCloud
+                    );
+
+                    if (exito) {
+                        JOptionPane.showMessageDialog(panelPrincipal, 
+                            "¡Servicio publicado correctamente en Furverr!", 
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        refrescarVista();
+                    } else {
+                        JOptionPane.showMessageDialog(panelPrincipal, 
+                            "Error al guardar en la base de datos.", 
+                            "Error SQL", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                SwingUtilities.invokeLater(() -> panelPrincipal.setCursor(Cursor.getDefaultCursor()));
             }
-        }
-
-        if (rutasPersistentes.isEmpty()) {
-             JOptionPane.showMessageDialog(panelPrincipal, "Error al procesar las imágenes.", "Error", JOptionPane.ERROR_MESSAGE);
-             return;
-        }
-
-        Ilustracion gigBase = new Ilustracion(tempTitulo, tempDescripcion, tempPaquetes.get(0).precio,
-                rutasPersistentes.get(0), nombreUsuario, tempCategoria,
-                tempEtiquetas);
-        
-        boolean exito = GestorDeDatos.publicarServicioCompleto(gigBase, tempPaquetes, tempExtras, tempFaqs,
-                rutasPersistentes);
-        
-        if (exito) {
-            JOptionPane.showMessageDialog(panelPrincipal, "¡Servicio publicado correctamente!", "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-            refrescarVista();
-        } else {
-            JOptionPane.showMessageDialog(panelPrincipal, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }).start(); 
     }
-
     // Helpers UI
     private void agregarLabelMetadato(JPanel p, String texto) {
         JLabel l = new JLabel(texto);
