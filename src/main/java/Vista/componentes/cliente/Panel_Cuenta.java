@@ -76,6 +76,38 @@ public class Panel_Cuenta extends JPanel {
         add(scroll, BorderLayout.CENTER);
     }
 
+
+    /**
+ * Método auxiliar para cargar la imagen de perfil.
+ * Maneja automáticamente la diferencia entre S3 (URL) y Archivos Locales.
+ * Retorna null si no hay imagen o si ocurre un error.
+ */
+private Image cargarImagenPerfil() {
+    String ruta = usuario.getRutaFotoPerfil();
+    
+    if (ruta == null || ruta.isEmpty()) {
+        return null;
+    }
+
+    try {
+        // AWS S3 
+        if (ruta.startsWith("http")) {
+            return new ImageIcon(new URL(ruta)).getImage();
+        } 
+        // local
+        else {
+            File f = new File(ruta);
+            if (f.exists()) {
+                return new ImageIcon(f.getAbsolutePath()).getImage();
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Error cargando imagen: " + e.getMessage());
+    }
+    
+    return null;
+}
+
     // =================================================================================
     //                             MÉTODOS DE UI
     // =================================================================================
@@ -118,21 +150,16 @@ public class Panel_Cuenta extends JPanel {
 
         lblAvatar = new JLabel();
         
-        // Cargar imagen inicial si existe
-        Image imgInicial = null;
-        if (usuario.getRutaFotoPerfil() != null && !usuario.getRutaFotoPerfil().isEmpty()) {
-            try {
-                File f = new File(usuario.getRutaFotoPerfil());
-                if(f.exists()) imgInicial = new ImageIcon(f.getAbsolutePath()).getImage();
-            } catch (Exception e) {}
-        }
+       // Cargar imagen desde AWS S3 
+        Image imgInicial = cargarImagenPerfil(); 
         actualizarDibujoAvatar(imgInicial);
+        
 
         lblAvatar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         lblAvatar.addMouseListener(new MouseAdapter() {
-            // AQUI ESTÁ EL CAMBIO: Abrimos el visor en lugar de cambiar directo
-            @Override public void mouseClicked(MouseEvent e) { abiriVisorfoto(); } 
+        @Override public void mouseClicked(MouseEvent e) { abiriVisorfoto(); } 
         });
+
         card.add(lblAvatar, gbc);
 
         // 2. TEXTOS
@@ -245,22 +272,16 @@ public class Panel_Cuenta extends JPanel {
         JLabel lblImagenGrande = new JLabel();
         lblImagenGrande.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // Reutilizamos la logica para cargar la imagen grande
-        if (usuario.getRutaFotoPerfil() != null && !usuario.getRutaFotoPerfil().isEmpty()) {
-            try {
-                File f = new File(usuario.getRutaFotoPerfil());
-                if (f.exists()) {
-                    ImageIcon iconoOriginal = new ImageIcon(f.getAbsolutePath());
-                    // Escalar a 300x300 aprox
-                    Image imgEscalada = iconoOriginal.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-                    lblImagenGrande.setIcon(new ImageIcon(imgEscalada));
-                } else {
-                    lblImagenGrande.setText("Error cargando imagen");
-                }
-            } catch (Exception e) { lblImagenGrande.setText("Error"); }
-        } else {
-            lblImagenGrande.setText("Sin foto de perfil");
-        }
+        // *************************************************************************************************************** 
+
+        Image imgRaw = cargarImagenPerfil();
+        if (imgRaw != null) {
+                Image imgEscalada = imgRaw.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+                lblImagenGrande.setIcon(new ImageIcon(imgEscalada));
+        } 
+        else{
+                lblImagenGrande.setText("Sin foto de perfil"); 
+            }
 
         // Botones
         JPanel panelBotones = new JPanel(new FlowLayout());
@@ -415,7 +436,8 @@ public class Panel_Cuenta extends JPanel {
         dialog.setVisible(true);
     }
 
-    private void actualizarDibujoAvatar(Image img) {
+    private void actualizarDibujoAvatar(Image imgInicial) {
+        
         int size = 100;
         BufferedImage imagenRedonda = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = imagenRedonda.createGraphics();
@@ -423,9 +445,9 @@ public class Panel_Cuenta extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        if (img != null) {
+        if (imgInicial != null) {
             g2.setClip(new Ellipse2D.Float(0, 0, size, size));
-            g2.drawImage(img, 0, 0, size, size, null);
+            g2.drawImage(imgInicial, 0, 0, size, size, null);
         } else {
             g2.setColor(new Color(29, 191, 115));
             g2.fillOval(0, 0, size, size);
