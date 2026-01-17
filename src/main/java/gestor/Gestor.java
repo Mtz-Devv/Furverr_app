@@ -1,9 +1,11 @@
 package gestor;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import database.DatabaseConnector;
-import database.GestorDeDatos;
 import database.GeneradorDeDatos; // <--- IMPORTAR
+import database.GestorDeDatos;
 import database.RespaldoBD;
 
 public class Gestor {
@@ -13,7 +15,8 @@ public class Gestor {
         System.setProperty("sun.java2d.d3d", "false");
 
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            // Forzar Nimbus para evitar problemas de colores en Linux (GTK)
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
             System.err.println("No se pudo establecer el Look and Feel.");
         }
