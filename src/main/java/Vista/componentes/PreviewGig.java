@@ -53,6 +53,26 @@ public class PreviewGig extends JDialog {
     private final int ALTO_MAX_CARRUSEL = 450;
     private final int ANCHO_SIDEBAR = 320;
 
+
+    // metodo para cragar imagenes desde S3 o local
+    private ImageIcon cargarImagenesGig(String ruta){
+        if (ruta == null || ruta.isEmpty()) {
+            return null;
+        }
+        
+        try {
+            if (ruta.startsWith("http")){
+                return new ImageIcon(new java.net.URL(ruta));
+            }
+            else {
+                return new ImageIcon(ruta);
+            }
+        } catch (Exception e) {
+            System.err.println("Error cargando imagen: ("+ ruta +") " + e.getMessage());
+            return null;
+        }
+    }
+
     public PreviewGig(Ilustracion gig, Ilustrador ilustrador, Panel_Ilustrador ventanaPrincipal, Usuario cliente) {
         super(ventanaPrincipal, "Vista Previa: " + gig.getTitulo(), false);
 
@@ -335,14 +355,17 @@ public class PreviewGig extends JDialog {
     }
 
     private void actualizarCarrusel() {
-        if (galeriaImagenes.isEmpty()) {
-            lblMainImage.setText("Sin imágenes");
-            return;
-        }
+    if (galeriaImagenes.isEmpty()) {
+        lblMainImage.setText("Sin imágenes");
+        return;
+    }
 
-        String ruta = galeriaImagenes.get(currentImageIndex);
-        ImageIcon icon = new ImageIcon(ruta);
+    String ruta = galeriaImagenes.get(currentImageIndex);
+    
+    ImageIcon icon = cargarImagenesGig(ruta);
 
+    if (icon != null && icon.getIconWidth() > 0) {
+        
         Image imgOriginal = icon.getImage();
         int origW = icon.getIconWidth();
         int origH = icon.getIconHeight();
@@ -359,16 +382,21 @@ public class PreviewGig extends JDialog {
 
             Image imgEscalada = imgOriginal.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
             lblMainImage.setIcon(new ImageIcon(imgEscalada));
-        } else {
-            lblMainImage.setText("Error imagen");
+            lblMainImage.setText(""); 
         }
+    } else {
+        lblMainImage.setIcon(null);
+        lblMainImage.setText("Error al cargar imagen");
+    }
 
-        panelThumbnails.removeAll();
-        for (int i = 0; i < galeriaImagenes.size(); i++) {
-            String r = galeriaImagenes.get(i);
-            ImageIcon thIcon = new ImageIcon(r);
+    panelThumbnails.removeAll();
+    for (int i = 0; i < galeriaImagenes.size(); i++) {
+        String r = galeriaImagenes.get(i);
+        
+        ImageIcon thIcon = cargarImagenesGig(r);
+
+        if (thIcon != null) {
             Image thImg = thIcon.getImage().getScaledInstance(80, 50, Image.SCALE_SMOOTH);
-
             JLabel lblTh = new JLabel(new ImageIcon(thImg));
             lblTh.setPreferredSize(new Dimension(80, 50));
             lblTh.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -388,9 +416,10 @@ public class PreviewGig extends JDialog {
             });
             panelThumbnails.add(lblTh);
         }
-        panelThumbnails.revalidate();
-        panelThumbnails.repaint();
     }
+    panelThumbnails.revalidate();
+    panelThumbnails.repaint();
+}
 
     private JPanel crearHeaderNavegacion() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));

@@ -16,6 +16,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import java.net.URL;
+
+
 public class Panel_Cliente extends JFrame {
 
     private Usuario clienteActual;
@@ -283,6 +286,31 @@ public class Panel_Cliente extends JFrame {
         }
     }
 
+    // Carga la imagen de perfil del clienteActual, ya sea desde URL o archivo local
+    private Image cargarImagenPerfil(){
+        String ruta = clienteActual.getRutaFotoPerfil();
+
+        if (ruta == null || ruta.isEmpty()) {
+            return null;
+        }
+
+        try{
+            if(ruta.startsWith("http")) {
+                return new ImageIcon(new URL(ruta)).getImage();
+            }
+            else {
+                File f = new File(ruta);
+                if (f.exists()) {
+                    return new ImageIcon(f.getAbsolutePath()).getImage();
+                }
+            }
+        } catch (Exception e){
+            System.err.println("Error cargando imagen de perfil: " + e.getMessage());
+        }
+        return null;
+
+
+    }
     /**
      * Genera un icono redondo para el botón del menú.
      * Si hay foto, la usa. Si no, usa la inicial.
@@ -299,11 +327,13 @@ public class Panel_Cliente extends JFrame {
         Image imgUsuario = null;
         if (clienteActual.getRutaFotoPerfil() != null && !clienteActual.getRutaFotoPerfil().isEmpty()) {
             try {
-                File f = new File(clienteActual.getRutaFotoPerfil());
-                if (f.exists()) {
-                    imgUsuario = new ImageIcon(f.getAbsolutePath()).getImage();
-                }
+
+                imgUsuario = cargarImagenPerfil();
+                //File f = new File(clienteActual.getRutaFotoPerfil());
+                //if (f.exists()) {
+                //    imgUsuario = new ImageIcon(f.getAbsolutePath()).getImage();
             } catch (Exception e) {
+                System.err.println("Error cargando imagen de perfil: " + e.getMessage());
             }
         }
 
