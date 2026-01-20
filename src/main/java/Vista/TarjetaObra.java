@@ -15,6 +15,9 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.net.URL;
+
+
 public class TarjetaObra extends JPanel {
 
     private Usuario clienteActual;
@@ -25,6 +28,27 @@ public class TarjetaObra extends JPanel {
         this.ilustracion = ilustracion;
         initComponent();
     }
+
+
+    // Metodo para abrir imagenes de S3, aws
+        private ImageIcon loadIcon(String ruta){
+            if(ruta == null || ruta.isEmpty()){
+                return null;
+            }
+
+            try{
+                if (ruta.startsWith("http")){
+                    return new ImageIcon(new java.net.URL(ruta));
+                }
+                else{
+                    return new ImageIcon(ruta);
+                }
+            } catch (Exception e){
+                System.out.println("Error cargando imagen: ("+ ruta +")" + e.getMessage());
+                return null;
+            }
+    
+        }
 
     private void initComponent() {
         setLayout(new BorderLayout(5, 5));
@@ -62,6 +86,8 @@ public class TarjetaObra extends JPanel {
             }
         });
 
+        
+
         // --- IMAGEN ---
         JLabel lblImagen = new JLabel();
         lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
@@ -69,7 +95,10 @@ public class TarjetaObra extends JPanel {
         lblImagen.setOpaque(true);
         lblImagen.setBackground(Estilos.COLOR_FONDO_GRIS);
 
-        ImageIcon icon = ilustracion.getImageIcon();
+
+        String rutaString = ilustracion.getRutaImagen();
+        ImageIcon icon = loadIcon(rutaString);
+        
         if (icon != null && icon.getImage() != null) {
             Image img = icon.getImage().getScaledInstance(220, 160, Image.SCALE_SMOOTH);
             lblImagen.setIcon(new ImageIcon(img));

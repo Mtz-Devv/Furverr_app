@@ -312,18 +312,18 @@ public class Panel_Cliente extends JFrame {
 
     }
     /**
-     * Genera un icono redondo para el botón del menú.
-     * Si hay foto, la usa. Si no, usa la inicial.
+     * genera un icono redondo para el botón del menú.
+     * si hay foto, la usa. Si no, usa la letra inicial del nombre
      */
     private Icon crearIconoAvatarPeque(int size) {
         BufferedImage imagenFinal = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = imagenFinal.createGraphics();
 
-        // Suavizado para que el círculo no se vea pixelado
+        // suavizado para que el círculo no se vea pixelado
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        // 1. Intentar cargar la imagen del usuario
+        // intentar cargar la imagen del usuario
         Image imgUsuario = null;
         if (clienteActual.getRutaFotoPerfil() != null && !clienteActual.getRutaFotoPerfil().isEmpty()) {
             try {
