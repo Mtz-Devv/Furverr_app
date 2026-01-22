@@ -29,7 +29,8 @@ public class Gestor {
         DatabaseConnector.crearTablasSiNoExisten();
 
         // 3. Restaurar o Cargar Datos
-        RespaldoBD.restaurarDatos(); 
+        RespaldoBD.restaurarDatos();
+        //GestorDeDatos.insertarDatosDePruebaSiVacio(); 
         
         // Si la BD estaba vacía y restaurarDatos no hizo nada (porque no había backup),
         // insertarDatosDePruebaSiVacio insertará los usuarios básicos.

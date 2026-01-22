@@ -31,8 +31,14 @@ public class GeneradorDeDatos {
     private static final String DESC_FUZZY = "¡Tu mano derecha en la oficina virtual! Soy Alex 'Fuzzy', asistente virtual. Me encargo de esas tareas administrativas que te quitan tiempo.";
 
     public static void inicializarIlustradoresDetallados() {
-        System.out.println("[Generador] Inicializando perfiles, Gigs, Tags y FAQs...");
-        
+        // --- NUEVO: VERIFICACIÓN DE SEGURIDAD ---
+        if (verificarSiYaExistenDatos()) {
+            System.out.println("[Generador] Datos detectados en la nube. Saltando generación masiva para optimizar inicio.");
+            return; // <--- AQUÍ SE DETIENE SI YA HAY DATOS
+        }
+    // ----------------------------------------
+
+    System.out.println("[Generador] Inicializando perfiles, Gigs, Tags y FAQs...");        
         // ==================================================
         // --- 1. ARTBYLAURA (Ilustración General) ---
         // ==================================================
@@ -391,5 +397,18 @@ public class GeneradorDeDatos {
         try {
             ImageIO.write(bufferedImage, "png", archivoDestino);
         } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    private static boolean verificarSiYaExistenDatos() {
+        // Consulta rápida: Si existe el usuario "ArtByLaura", asumimos que ya se corrió el script.
+        String sql = "SELECT nombreUsuario FROM Usuarios WHERE nombreUsuario = 'ArtByLaura'";
+        try (Connection conn = DatabaseConnector.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+            return rs.next(); // Retorna TRUE si Laura ya existe
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

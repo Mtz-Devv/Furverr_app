@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class S3Service {
 
-    // CONFIGURACIÓN CENTRALIZADA
+    // CONFIGURACION CENTRALIZADA
     private static final String BUCKET_NAME = "furverr-server"; 
     private static final Region REGION = Region.US_EAST_1; 
 
@@ -22,7 +22,7 @@ public class S3Service {
         if (s3 == null) {
             s3 = S3Client.builder()
                     .region(REGION)
-                    .credentialsProvider(DefaultCredentialsProvider.create()) // Busca en variables de entorno o .aws/credentials
+                    .credentialsProvider(DefaultCredentialsProvider.create()) 
                     .build();
         }
         return s3;
