@@ -62,13 +62,14 @@ public class PreviewGig extends JDialog {
         
         try {
             if (ruta.startsWith("http")){
-                return new ImageIcon(new java.net.URL(ruta));
+                String rutaSinErrores = ruta.replace(" ", "%20");
+                return new ImageIcon(new java.net.URL(rutaSinErrores));
             }
             else {
                 return new ImageIcon(ruta);
             }
         } catch (Exception e) {
-            System.err.println("Error cargando imagen: ("+ ruta +") " + e.getMessage());
+            System.err.println("Error cargando imagen desde la nube: ("+ ruta +") " + e.getMessage());
             return null;
         }
     }
@@ -354,6 +355,7 @@ public class PreviewGig extends JDialog {
         actualizarCarrusel();
     }
 
+    // Actualiza la imagen principal y las miniaturas del carrusel
     private void actualizarCarrusel() {
     if (galeriaImagenes.isEmpty()) {
         lblMainImage.setText("Sin imágenes");
@@ -384,10 +386,11 @@ public class PreviewGig extends JDialog {
             lblMainImage.setIcon(new ImageIcon(imgEscalada));
             lblMainImage.setText(""); 
         }
-    } else {
+    } else 
+        {
         lblMainImage.setIcon(null);
-        lblMainImage.setText("Error al cargar imagen");
-    }
+        lblMainImage.setText("Error al cargar imagen Error 1");
+        }
 
     panelThumbnails.removeAll();
     for (int i = 0; i < galeriaImagenes.size(); i++) {

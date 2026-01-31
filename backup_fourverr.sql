@@ -1,5 +1,5 @@
 -- RESPALDO AUTOMATICO FOURVERR APP
--- FECHA: 2026-01-22 10:59:41
+-- FECHA: 2026-01-30 09:13:12
 
 INSERT INTO Usuarios VALUES ('admin', 'admin@ex.com', 'adminpass', 'admin', true, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('ArtByLaura', 'laura@ex.com', 'artpass', 'ilustrador', true, 'Laura Design', '¡Hola! Soy Laura, diseñadora gráfica e ilustradora con enfoque en identidad visual. Mi especialidad es transformar ideas abstractas en logotipos y marcas memorables.', 50.0, '/Users/isaaciturralde/Documents/usuarios/ilustradores/ArtByLaura/perfil.png', 'Inglés', 'Nativo', 'Diseño Gráfico en Parsons (Estados Unidos, 2021)', 'Best Logo - Behance (2022)', 'Illustrator (Exp)');
@@ -11,11 +11,13 @@ INSERT INTO Usuarios VALUES ('FuzzyPaws', 'fuzzy@ex.com', 'pass4', 'ilustrador',
 INSERT INTO Usuarios VALUES ('GrimShadow', 'grim@ex.com', 'pass5', 'ilustrador', true, 'Dante Void', 'Desde las sombras emergen las marcas más impactantes. Soy Dante \'Grim\', diseñador editorial y de portadas. Me especializo en el nicho de fantasía oscura.', 55.0, '/Users/isaaciturralde/Documents/usuarios/ilustradores/GrimShadow/perfil.png', 'Español', 'Nativo', 'Artes Visuales en UNAM (México, 2019)', 'Editorial Gold - Dark Arts (2021)', 'Photoshop (Exp)');
 INSERT INTO Usuarios VALUES ('holasaul', 'holasaul@gmail.com', 'diegoysaul', 'usuario_nuevo', true, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('ilustrador', 'ilustrador@gmail.com', 'ilustrador', 'usuario_nuevo', true, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO Usuarios VALUES ('isaac', 'isaacVGN@example.com', 'isaac', 'cliente', true, 'isaac', 'hi there, i;m gona take my pp away', NULL, 'https://furverr-server.s3.us-east-1.amazonaws.com/perfil_isaac_1768618373053.png', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO Usuarios VALUES ('isaac', 'isaacVGN@example.com', 'isaac', 'cliente', true, 'isaac', 'hi there, i;m gona take my pp away\nxd', NULL, 'https://furverr-server.s3.us-east-1.amazonaws.com/perfiles/isaac/1769663396203_a013c198-abe2-4456-bfc9-75a42d8c96b1.jpg', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('Issac1313', 'issac1313@gmail.com', 'issac1313', 'usuario_nuevo', true, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('itzel', 'itzel@example.com', 'itzel', 'ilustrador', true, 'EmbroderyItz', 'I just want to show my world through embroidery live in a embroidery way show embroidery make Embro your family make embroidery your friends make your friends embroidery and embroidery themselves.', NULL, '/Users/isaaciturralde/Documents/usuarios/ilustradores/itzel/perfil.jpeg', 'Inglés', 'Alto', NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('lizeth', 'lizeth@example.com', 'liz', 'cliente', true, 'lizeth', 'I love cats and the black color. \nI\'m death itself personficated in an empty fleshy mold', NULL, 'https://furverr-server.s3.us-east-1.amazonaws.com/perfil_lizeth_1768635470940.png', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO Usuarios VALUES ('luis pardo', 'luisp@gmail.com', 'luisp123', 'ilustrador', true, 'ideasTusFrames', 'enmarco todas fotos. enviamelas por correo o FedEx. igual creo marcos de imagenes con marialuisas digitales. Lo que tu me pidas respecto a los marcos de cuadros lo hago.\nI do mark all pictures. Send them through FedEx. I also do digital marking and marialuisas. Whatever you ask I\'ll do it. As long as it is about images marks.', NULL, '/Users/isaaciturralde/Documents/usuarios/ilustradores/luis pardo/perfil.jpg', 'Inglés', 'Nativo', NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('mariana', 'mariana@example.com', 'mariana', 'cliente', true, NULL, 'hola, me gustan las imagenes', NULL, '/Users/isaaciturralde/NetBeansProjects/gestor/imagenes_perfil/perfil_mariana_1764477948403.png', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO Usuarios VALUES ('Natalia', 'natalia@@example.com', 'natalia123', 'cliente', true, NULL, 'there is nothing you can do about it!', NULL, 'https://furverr-server.s3.us-east-1.amazonaws.com/perfiles/Natalia/1769663821406_3622f326-5265-4e73-9862-44631c7a507a.jpg', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('NeonSamurai', 'neon@ex.com', 'pass3', 'ilustrador', true, 'Kaito Marketing', 'El futuro del marketing es digital. Soy Kaito, estratega de redes sociales. Corto a través del ruido de internet con campañas agresivas y visualmente impactantes.', 65.0, '/Users/isaaciturralde/Documents/usuarios/ilustradores/NeonSamurai/perfil.png', 'Inglés', 'Alto', 'Marketing en Keio (Japón, 2020)', 'Ads Cert - Google (2024)', 'FB Ads (Exp)');
 INSERT INTO Usuarios VALUES ('o', 'o', 'o', 'cliente', true, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO Usuarios VALUES ('PixelPanda', 'panda@ex.com', 'artpass2', 'ilustrador', true, 'Panda Motion', '¡Dale vida a tus píxeles! Soy PixelPanda, animador 2D especializado en la estética retro de los 8 y 16 bits. No solo dibujo sprites; los hago caminar y saltar.', 25.0, '/Users/isaaciturralde/Documents/usuarios/ilustradores/PixelPanda/perfil.png', 'Español', 'Alto', 'Animación en U-tad (España, 2023)', 'Unity Cert - Unity (2023)', 'Aseprite (Exp)');
@@ -58,6 +60,7 @@ INSERT INTO Ilustraciones VALUES (25, 'Servicio de paisajes realista', 'imagen d
 INSERT INTO Ilustraciones VALUES (26, 'Campaña Cyberpunk', 'Diseño publicitario futurista para redes sociales.', 85.0, '/Users/isaaciturralde/Documents/usuarios/ilustradores/NeonSamurai/gigs/Campa_a_Cyberpunk/img_0.png', 'NeonSamurai', 'MARKETING DIGITAL/Publicidad', 'cyberpunk, ads, social media, futuristic, marketing', 'ACTIVO');
 INSERT INTO Ilustraciones VALUES (27, 'Aprende a usar AWS (amazon web services) enfocado en estudiantes y desarolladores juniors que deseen apredner Cloud computing', 'empiza a trabajar en cloud computing. Demuestra a los empleadores tus habilidades y convence a cualuiqer reclutador', 50.0, '/Users/isaaciturralde/Documents/usuarios/ilustradores/itzel/gigs/Aprende_a_usar_AWS__amazon_web_services__enfocado_en_estudiantes_y_desarolladores_juniors_que_deseen_apredner_Cloud_computing/img_0.jpg', 'itzel', 'NEGOCIOS/Asistencia', 'AWS,CLOUDCOMPUTING,DESAROLLOWEB,CURSOS,MEJORATUSUELDO', 'ACTIVO');
 INSERT INTO Ilustraciones VALUES (28, 'Microsoft Office para MacOS', 'office para tu computadora Apple', 150.0, 'https://furverr-server.s3.us-east-1.amazonaws.com/gigs/itzel/1768657614180_555b584e-1f6e-4229-94ce-7f0a97d9f1f6.jpg', 'itzel', 'NEGOCIOS/Asistencia', 'OFFICE,MICROSOFTOFFICE,MACOS,HACK,FREE', 'ACTIVO');
+INSERT INTO Ilustraciones VALUES (29, 'Enamrco de imagenes. Enamrco digital de imagenes digitales', 'iyrwglwyrgylkuedglkuaeb ;kuefhb ;kuehf;kueH;IERU ;KSURHBG WIRUFB;kae wiub;kEUBF', 150.0, 'https://furverr-server.s3.us-east-1.amazonaws.com/gigs/luis pardo/1769666201468_902324ba-26ec-4289-b020-9cd952c39a14.jpg', 'luis pardo', 'VIDEO Y ANIMACIÓN/Edición', 'MARK IMAGES,DEVIANTART', 'ACTIVO');
 
 INSERT INTO Paquetes VALUES (2, 5, 'Basic', 'Básico', 'animacion simple', 1, 0, 5.0);
 INSERT INTO Paquetes VALUES (3, 6, 'Basic', 'Básico', 'reel de duracion de 30 segundos a 1 minuto con la informacion o contenido que gustes', 3, 2, 20.0);
@@ -66,6 +69,7 @@ INSERT INTO Paquetes VALUES (5, 27, 'Basic', 'desarolladores con experiencia 6 m
 INSERT INTO Paquetes VALUES (6, 27, 'Standard', 'recien egresados', 'clases grabadas y mensajes a traves de slack en horario restrignido', 7, 3, 150.0);
 INSERT INTO Paquetes VALUES (7, 27, 'Premium', 'estudiantes y todos', 'Clases grabas y en vivo. Mensajes a traves de slack en horario semi restringido', 7, -1, 250.0);
 INSERT INTO Paquetes VALUES (8, 28, 'Basic', 'Básico', 'office una sola vez', 1, 2, 150.0);
+INSERT INTO Paquetes VALUES (9, 29, 'Basic', 'Básico', 'do it', 1, 0, 150.0);
 
 INSERT INTO GigExtras VALUES (5, 6, 'Revisión Extra', 'Extra rev', 5.0, 0);
 INSERT INTO GigExtras VALUES (6, 25, 'Entrega Rápida', 'Entrega prioritaria', 10.0, 0);
@@ -192,6 +196,9 @@ INSERT INTO GigGaleria VALUES (28539, 14, '/Users/isaaciturralde/Documents/usuar
 INSERT INTO GigGaleria VALUES (28540, 15, '/Users/isaaciturralde/Documents/usuarios/ilustradores/FuzzyPaws/gigs/Asistente_Virtual/img_0.png');
 INSERT INTO GigGaleria VALUES (28541, 15, '/Users/isaaciturralde/Documents/usuarios/ilustradores/FuzzyPaws/gigs/Asistente_Virtual/img_1.png');
 INSERT INTO GigGaleria VALUES (28542, 15, '/Users/isaaciturralde/Documents/usuarios/ilustradores/FuzzyPaws/gigs/Asistente_Virtual/img_2.png');
+INSERT INTO GigGaleria VALUES (28543, 29, 'https://furverr-server.s3.us-east-1.amazonaws.com/gigs/luis pardo/1769666201468_902324ba-26ec-4289-b020-9cd952c39a14.jpg');
+INSERT INTO GigGaleria VALUES (28544, 29, 'https://furverr-server.s3.us-east-1.amazonaws.com/gigs/luis pardo/1769666204447_7c6ace59-0f44-48eb-aa27-e006d06efd86.jpg');
+INSERT INTO GigGaleria VALUES (28545, 29, 'https://furverr-server.s3.us-east-1.amazonaws.com/gigs/luis pardo/1769666204863_994b8491-0902-4e61-bd8a-ddef07168fb2.jpg');
 
 INSERT INTO Pedidos VALUES (1, 'cliente1', 'PixelPanda', 'Panda Programador', '07/12/2025', 30.0, 'TERMINADO', 2026-01-05T05:41:13);
 INSERT INTO Pedidos VALUES (2, 'cliente1', 'ArtByLaura', 'Guerrero Lunar', '07/12/2025', 65.0, 'PENDIENTE', 2026-01-05T05:41:13);

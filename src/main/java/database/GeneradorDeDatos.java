@@ -34,7 +34,7 @@ public class GeneradorDeDatos {
         // --- NUEVO: VERIFICACIÓN DE SEGURIDAD ---
         if (verificarSiYaExistenDatos()) {
             System.out.println("[Generador] Datos detectados en la nube. Saltando generación masiva para optimizar inicio.");
-            return; // <--- AQUÍ SE DETIENE SI YA HAY DATOS
+            return; 
         }
     // ----------------------------------------
 
@@ -400,12 +400,12 @@ public class GeneradorDeDatos {
     }
 
     private static boolean verificarSiYaExistenDatos() {
-        // Consulta rápida: Si existe el usuario "ArtByLaura", asumimos que ya se corrió el script.
+        
         String sql = "SELECT nombreUsuario FROM Usuarios WHERE nombreUsuario = 'ArtByLaura'";
         try (Connection conn = DatabaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery()) {
-            return rs.next(); // Retorna TRUE si Laura ya existe
+            return rs.next(); 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
